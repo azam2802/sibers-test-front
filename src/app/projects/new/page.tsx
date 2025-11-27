@@ -3,8 +3,6 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { toast } from "react-hot-toast"
 import {
   Card,
@@ -13,9 +11,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { EmployeeSelect } from "@/components/employee-select"
-import { EmployeeMultiSelect } from "@/components/employee-multi-select"
-import { FileUpload } from "@/components/file-upload"
+import { ProjectBasicInfoStep } from "@/components/projects/wizard/project-basic-info-step"
+import { ProjectCompaniesStep } from "@/components/projects/wizard/project-companies-step"
+import { ProjectManagerStep } from "@/components/projects/wizard/project-manager-step"
+import { ProjectEmployeesStep } from "@/components/projects/wizard/project-employees-step"
+import { ProjectFilesStep } from "@/components/projects/wizard/project-files-step"
 import { projectsService } from "@/services/projects.service"
 import { useAuthStore } from "@/store/auth-store"
 import { ChevronLeft, ChevronRight } from "lucide-react"
@@ -110,122 +110,50 @@ export default function NewProjectPage() {
     switch (currentStep) {
       case 1:
         return (
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label>
-                Project Name <span className="text-destructive">*</span>
-              </Label>
-              <Input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Enter project name"
-                required
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>
-                  Start Date <span className="text-destructive">*</span>
-                </Label>
-                <Input
-                  type="date"
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>
-                  End Date <span className="text-destructive">*</span>
-                </Label>
-                <Input
-                  type="date"
-                  value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                  required
-                />
-              </div>
-            </div>
-            <div className="space-y-2">
-              <Label>
-                Priority <span className="text-destructive">*</span>
-              </Label>
-              <Input
-                type="number"
-                min="1"
-                max="10"
-                value={priority}
-                onChange={(e) => setPriority(e.target.value)}
-                placeholder="1-10"
-                required
-              />
-            </div>
-          </div>
+          <ProjectBasicInfoStep
+            name={name}
+            setName={setName}
+            startDate={startDate}
+            setStartDate={setStartDate}
+            endDate={endDate}
+            setEndDate={setEndDate}
+            priority={priority}
+            setPriority={setPriority}
+          />
         )
 
       case 2:
         return (
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label>
-                Customer Company <span className="text-destructive">*</span>
-              </Label>
-              <Input
-                value={customerCompany}
-                onChange={(e) => setCustomerCompany(e.target.value)}
-                placeholder="Enter customer company name"
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>
-                Executor Company <span className="text-destructive">*</span>
-              </Label>
-              <Input
-                value={executorCompany}
-                onChange={(e) => setExecutorCompany(e.target.value)}
-                placeholder="Enter executor company name"
-                required
-              />
-            </div>
-          </div>
+          <ProjectCompaniesStep
+            customerCompany={customerCompany}
+            setCustomerCompany={setCustomerCompany}
+            executorCompany={executorCompany}
+            setExecutorCompany={setExecutorCompany}
+          />
         )
 
       case 3:
         return (
-          <div className="space-y-4">
-            <EmployeeSelect
-              value={managerId}
-              onChange={setManagerId}
-              label="Project Manager"
-              placeholder="Search for project manager..."
-              required
-            />
-          </div>
+          <ProjectManagerStep
+            managerId={managerId}
+            setManagerId={setManagerId}
+          />
         )
 
       case 4:
         return (
-          <div className="space-y-4">
-            <EmployeeMultiSelect
-              value={employeeIds}
-              onChange={setEmployeeIds}
-              label="Project Employees"
-              placeholder="Search and add employees..."
-            />
-          </div>
+          <ProjectEmployeesStep
+            employeeIds={employeeIds}
+            setEmployeeIds={setEmployeeIds}
+          />
         )
 
       case 5:
         return (
-          <div className="space-y-4">
-            <FileUpload
-              files={files}
-              onChange={setFiles}
-              label="Project Documents"
-              maxFiles={10}
-            />
-          </div>
+          <ProjectFilesStep
+            files={files}
+            setFiles={setFiles}
+          />
         )
 
       default:
@@ -253,11 +181,10 @@ export default function NewProjectPage() {
               {[1, 2, 3, 4, 5].map((step) => (
                 <div
                   key={step}
-                  className={`flex-1 h-2 rounded ${
-                    step <= currentStep
-                      ? "bg-primary"
-                      : "bg-muted"
-                  } ${step < 5 ? "mr-2" : ""}`}
+                  className={`flex-1 h-2 rounded ${step <= currentStep
+                    ? "bg-primary"
+                    : "bg-muted"
+                    } ${step < 5 ? "mr-2" : ""}`}
                 />
               ))}
             </div>

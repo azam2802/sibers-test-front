@@ -87,7 +87,7 @@ function HomeContent() {
                     <div>
                       <p className="font-medium text-sm">{project.name}</p>
                       <p className="text-xs text-muted-foreground">
-                        {project.tasksCount} tasks
+                        {new Date(project.startDate).toLocaleDateString()} - {new Date(project.endDate).toLocaleDateString()}
                       </p>
                     </div>
                     <ArrowRight className="h-4 w-4 text-muted-foreground" />

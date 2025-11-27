@@ -14,6 +14,7 @@ import { projectsService } from "@/services/projects.service"
 import { tasksService } from "@/services/tasks.service"
 import { useAuthStore } from "@/store/auth-store"
 import { AuthProtected } from "@/components/auth-protected"
+import { TaskCard } from "@/components/task-card"
 import type { Project, Task } from "@/types"
 import { Plus, Calendar, Users, Trash2, Edit } from "lucide-react"
 
@@ -34,7 +35,13 @@ function ProjectDetailContent() {
           tasksService.getByProject(projectId),
         ])
         setProject(projectData)
-        setTasks(tasksData)
+
+        if (user?.role !== "Employee") {
+          setTasks(tasksData)
+        } else {
+          setTasks(tasksData.filter((task) => task.assigneeId === user.id))
+        }
+
       } catch (error) {
         console.error("Failed to fetch project:", error)
       } finally {
@@ -48,7 +55,6 @@ function ProjectDetailContent() {
   const canManageProject =
     user?.role === "Director" ||
     (user?.role === "ProjectManager" && project?.managerId === user.id)
-console.log(user?.role, project?.managerId, user?.id)
 
   const canCreateTask = canManageProject
 
@@ -147,7 +153,7 @@ console.log(user?.role, project?.managerId, user?.id)
       </Card>
 
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold">Tasks</h2>
+        <h2 className="text-2xl font-bold">{user?.role !== "Employee" ? "All" : "Your"} Tasks</h2>
         {canCreateTask && (
           <Button onClick={() => router.push(`/tasks/new?projectId=${projectId}`)}>
             <Plus className="h-4 w-4 mr-2" />
@@ -167,29 +173,11 @@ console.log(user?.role, project?.managerId, user?.id)
       ) : (
         <div className="space-y-2">
           {tasks.map((task) => (
-            <Card
+            <TaskCard
               key={task.id}
-              className="cursor-pointer hover:shadow-md transition-shadow"
+              task={task}
               onClick={() => router.push(`/tasks/${task.id}`)}
-            >
-              <CardContent className="p-4">
-                <div className="flex justify-between items-start">
-                  <div className="flex-1">
-                    <h3 className="font-semibold">{task.title}</h3>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      {task.comment}
-                    </p>
-                    <div className="flex gap-4 mt-2 text-xs text-muted-foreground">
-                      <span>Status: {task.status}</span>
-                      <span>Priority: {task.priority}</span>
-                      {task.assigneeFullName && (
-                        <span>Assignee: {task.assigneeFullName}</span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            />
           ))}
         </div>
       )}

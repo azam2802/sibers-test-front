@@ -216,15 +216,19 @@ function TaskDetailContent() {
               </div>
             </div>
 
-            <div className="space-y-2">
-              <EmployeeSelect
-                value={assigneeId}
-                onChange={setAssigneeId}
-                label="Assignee"
-                placeholder="Select assignee..."
-                disabled={!canChangeAssignee}
-              />
-            </div>
+            {
+              canChangeAssignee && (
+                <div className="space-y-2">
+                  <EmployeeSelect
+                    value={assigneeId}
+                    onChange={setAssigneeId}
+                    label="Assignee"
+                    placeholder="Select assignee..."
+                    disabled={!canChangeAssignee}
+                  />
+                </div>
+              )
+            }
 
             <div className="pt-4 border-t">
               <div className="text-sm text-muted-foreground space-y-1">
