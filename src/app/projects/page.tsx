@@ -3,6 +3,15 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import {
   Card,
   CardContent,
@@ -14,7 +23,7 @@ import { projectsService } from "@/services/projects.service"
 import { useAuthStore } from "@/store/auth-store"
 import { AuthProtected } from "@/components/auth-protected"
 import type { Project } from "@/types"
-import { Plus, Calendar, Users, CheckSquare } from "lucide-react"
+import { Plus, Calendar, Users, CheckSquare, Filter } from "lucide-react"
 
 function ProjectsContent() {
   const router = useRouter()
@@ -22,29 +31,46 @@ function ProjectsContent() {
   const [projects, setProjects] = useState<Project[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        // For now, only Director can see all projects
-        // ProjectManager and Employee should see their own projects
-        // This will be handled by backend filtering
-        const data = await projectsService.getAll()
-        setProjects(data)
-      } catch (error: any) {
-        console.error("Failed to fetch projects:", error)
-        if (error.status === 403) {
-          // User doesn't have permission
-          setProjects([])
-        }
-      } finally {
-        setIsLoading(false)
-      }
-    }
+  // Filter and sort state
+  const [startFrom, setStartFrom] = useState("")
+  const [startTo, setStartTo] = useState("")
+  const [priority, setPriority] = useState<string>("")
+  const [sortBy, setSortBy] = useState("startdate_desc")
 
+  const fetchProjects = async () => {
+    try {
+      setIsLoading(true)
+      const params: any = {}
+
+      if (startFrom) params.startFrom = startFrom
+      if (startTo) params.startTo = startTo
+      if (priority) params.priority = parseInt(priority)
+      if (sortBy) params.sortBy = sortBy
+
+      const data = await projectsService.getAll(params)
+      setProjects(data)
+    } catch (error: any) {
+      console.error("Failed to fetch projects:", error)
+      if (error.status === 403) {
+        setProjects([])
+      }
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  useEffect(() => {
     fetchProjects()
-  }, [])
+  }, [startFrom, startTo, priority, sortBy])
 
   const canCreateProject = user?.role === "Director"
+
+  const handleClearFilters = () => {
+    setStartFrom("")
+    setStartTo("")
+    setPriority("")
+    setSortBy("startdate_desc")
+  }
 
   if (isLoading) {
     return (
@@ -70,6 +96,82 @@ function ProjectsContent() {
           </Button>
         )}
       </div>
+
+      {/* Filters Card */}
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Filter className="h-5 w-5" />
+            Filters & Sorting
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="space-y-2">
+              <Label>Start Date From</Label>
+              <Input
+                type="date"
+                value={startFrom}
+                onChange={(e) => setStartFrom(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Start Date To</Label>
+              <Input
+                type="date"
+                value={startTo}
+                onChange={(e) => setStartTo(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Priority</Label>
+              <Select value={priority} onValueChange={setPriority}>
+                <SelectTrigger>
+                  <SelectValue placeholder="All Priorities" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="0">All Priorities</SelectItem>
+                  <SelectItem value="1">Priority 1</SelectItem>
+                  <SelectItem value="2">Priority 2</SelectItem>
+                  <SelectItem value="3">Priority 3</SelectItem>
+                  <SelectItem value="4">Priority 4</SelectItem>
+                  <SelectItem value="5">Priority 5</SelectItem>
+                  <SelectItem value="6">Priority 6</SelectItem>
+                  <SelectItem value="7">Priority 7</SelectItem>
+                  <SelectItem value="8">Priority 8</SelectItem>
+                  <SelectItem value="9">Priority 9</SelectItem>
+                  <SelectItem value="10">Priority 10</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label>Sort By</Label>
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="name">Name (A-Z)</SelectItem>
+                  <SelectItem value="name_desc">Name (Z-A)</SelectItem>
+                  <SelectItem value="startdate">Start Date (Oldest First)</SelectItem>
+                  <SelectItem value="startdate_desc">Start Date (Newest First)</SelectItem>
+                  <SelectItem value="priority">Priority (Low to High)</SelectItem>
+                  <SelectItem value="priority_desc">Priority (High to Low)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <div className="mt-4">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleClearFilters}
+            >
+              Clear Filters
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
 
       {projects.length === 0 ? (
         <Card>
@@ -132,4 +234,3 @@ export default function ProjectsPage() {
     </AuthProtected>
   )
 }
-
