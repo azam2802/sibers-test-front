@@ -18,7 +18,7 @@ import { ProjectEmployeesStep } from "@/components/projects/wizard/project-emplo
 import { ProjectFilesStep } from "@/components/projects/wizard/project-files-step"
 import { projectsService } from "@/services/projects.service"
 import { useAuthStore } from "@/store/auth-store"
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import { ChevronLeft, ChevronRight, X } from "lucide-react"
 
 type WizardStep = 1 | 2 | 3 | 4 | 5
 
@@ -193,15 +193,27 @@ export default function NewProjectPage() {
           {renderStep()}
 
           <div className="flex justify-between mt-8">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={handleBack}
+            {
+              currentStep > 1 ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleBack}
               disabled={currentStep === 1}
             >
               <ChevronLeft className="h-4 w-4 mr-1" />
               Back
             </Button>
+              ) : (
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => router.push("/projects")}
+            >
+              Cancel
+            </Button>
+              )
+            }
             {currentStep < 5 ? (
               <Button
                 type="button"
