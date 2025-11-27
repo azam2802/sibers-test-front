@@ -22,6 +22,7 @@ import {
 import { projectsService } from "@/services/projects.service"
 import { useAuthStore } from "@/store/auth-store"
 import { AuthProtected } from "@/components/auth-protected"
+import { LoaderFullPage } from "@/components/loader"
 import type { Project } from "@/types"
 import { Plus, Calendar, Users, CheckSquare, Filter } from "lucide-react"
 
@@ -73,11 +74,7 @@ function ProjectsContent() {
   }
 
   if (isLoading) {
-    return (
-      <div className="container mx-auto py-8 px-4">
-        <p>Loading projects...</p>
-      </div>
-    )
+    return <LoaderFullPage />
   }
 
   return (

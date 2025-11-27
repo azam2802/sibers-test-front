@@ -23,6 +23,7 @@ import { tasksService } from "@/services/tasks.service"
 import { useAuthStore } from "@/store/auth-store"
 import { AuthProtected } from "@/components/auth-protected"
 import { TaskCard } from "@/components/task-card"
+import { LoaderFullPage } from "@/components/loader"
 import type { Task, TaskStatus } from "@/types"
 import { Plus, Filter } from "lucide-react"
 
@@ -109,11 +110,7 @@ function TasksContent() {
   const canCreateTask = user?.role === "Director" || user?.role === "ProjectManager"
 
   if (isLoading) {
-    return (
-      <div className="container mx-auto py-8 px-4">
-        <p>Loading tasks...</p>
-      </div>
-    )
+    return <LoaderFullPage />
   }
 
   return (

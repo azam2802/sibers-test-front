@@ -23,6 +23,7 @@ import { EmployeeSelect } from "@/components/employee-select"
 import { tasksService } from "@/services/tasks.service"
 import { useAuthStore } from "@/store/auth-store"
 import { AuthProtected } from "@/components/auth-protected"
+import { LoaderFullPage } from "@/components/loader"
 import type { Task, TaskStatus } from "@/types"
 import { Trash2, Save } from "lucide-react"
 import { toast } from "react-hot-toast"
@@ -110,11 +111,7 @@ function TaskDetailContent() {
   }
 
   if (isLoading) {
-    return (
-      <div className="container mx-auto py-8 px-4">
-        <p>Loading task...</p>
-      </div>
-    )
+    return <LoaderFullPage />
   }
 
   if (!task) {

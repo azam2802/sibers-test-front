@@ -15,6 +15,7 @@ import { tasksService } from "@/services/tasks.service"
 import { useAuthStore } from "@/store/auth-store"
 import { AuthProtected } from "@/components/auth-protected"
 import { TaskCard } from "@/components/task-card"
+import { LoaderFullPage } from "@/components/loader"
 import type { Project, Task } from "@/types"
 import { Plus, Calendar, Users, Trash2, Edit } from "lucide-react"
 
@@ -59,11 +60,7 @@ function ProjectDetailContent() {
   const canCreateTask = canManageProject
 
   if (isLoading) {
-    return (
-      <div className="container mx-auto py-8 px-4">
-        <p>Loading project...</p>
-      </div>
-    )
+    return <LoaderFullPage />
   }
 
   if (!project) {

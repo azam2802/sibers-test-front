@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { AuthProtected } from "@/components/auth-protected"
+import { LoaderFullPage } from "@/components/loader"
 import { useAuthStore } from "@/store/auth-store"
 import { projectsService } from "@/services/projects.service"
 import { tasksService } from "@/services/tasks.service"
@@ -26,7 +27,7 @@ function HomeContent() {
         ])
 
         setProjects(projectsData),
-        setTasks(tasksData)
+          setTasks(tasksData)
 
       } catch (error) {
         console.error("Failed to fetch data:", error)
@@ -39,11 +40,7 @@ function HomeContent() {
   }, [user])
 
   if (isLoading) {
-    return (
-      <div className="container mx-auto py-8 px-4">
-        <p>Loading...</p>
-      </div>
-    )
+    return <LoaderFullPage />
   }
 
   const recentProjects = projects.slice(0, 5)

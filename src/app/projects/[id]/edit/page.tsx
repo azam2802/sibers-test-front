@@ -15,6 +15,7 @@ import { ProjectCompaniesStep } from "@/components/projects/wizard/project-compa
 import { ProjectManagerStep } from "@/components/projects/wizard/project-manager-step"
 import { ProjectEmployeesStep } from "@/components/projects/wizard/project-employees-step"
 import { ProjectFilesStep } from "@/components/projects/wizard/project-files-step"
+import { LoaderFullPage } from "@/components/loader"
 import { projectsService } from "@/services/projects.service"
 import { useAuthStore } from "@/store/auth-store"
 import { AuthProtected } from "@/components/auth-protected"
@@ -230,11 +231,7 @@ function EditProjectContent() {
   }
 
   if (isLoading) {
-    return (
-      <div className="container mx-auto py-8 px-4">
-        <p>Loading project data...</p>
-      </div>
-    )
+    return <LoaderFullPage />
   }
 
   return (

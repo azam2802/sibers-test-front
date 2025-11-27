@@ -16,6 +16,7 @@ import { AddEmployeeDialog } from "@/components/employees/add-employee-dialog"
 import { EditEmployeeDialog } from "@/components/employees/edit-employee-dialog"
 import { DeleteEmployeeDialog } from "@/components/employees/delete-employee-dialog"
 import { EmployeesTable } from "@/components/employees/employees-table"
+import { LoaderFullPage } from "@/components/loader"
 
 function EmployeesContent() {
   const { user } = useAuthStore()
@@ -162,11 +163,7 @@ function EmployeesContent() {
   }
 
   if (isLoading) {
-    return (
-      <div className="container mx-auto py-10 px-4">
-        <p>Loading employees...</p>
-      </div>
-    )
+    return <LoaderFullPage />
   }
 
   if (!isDirector) {
