@@ -46,7 +46,17 @@ export interface CreateEmployeeDto {
   lastName: string
   middleName?: string
   email: string
+  password: string
   role: "Developer" | "ProjectManager" | "Director"
+}
+
+export interface UpdateEmployeeDto {
+  firstName: string
+  lastName: string
+  middleName?: string
+  email: string
+  role: "Developer" | "ProjectManager" | "Director"
+  password?: string
 }
 
 // Project Types

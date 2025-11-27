@@ -25,6 +25,7 @@ import { useAuthStore } from "@/store/auth-store"
 import { AuthProtected } from "@/components/auth-protected"
 import type { Task, TaskStatus } from "@/types"
 import { Trash2, Save } from "lucide-react"
+import { toast } from "react-hot-toast"
 
 function TaskDetailContent() {
   const params = useParams()
@@ -87,7 +88,7 @@ function TaskDetailContent() {
       router.push(`/projects/${task.projectId}`)
     } catch (error: any) {
       console.error("Failed to update task:", error)
-      alert(error?.data?.title || "Failed to update task")
+      toast.error(error?.data?.detail || "Failed to update task")
     } finally {
       setIsSaving(false)
     }
@@ -102,7 +103,7 @@ function TaskDetailContent() {
       router.push(`/projects/${task.projectId}`)
     } catch (error: any) {
       console.error("Failed to delete task:", error)
-      alert(error?.data?.title || "Failed to delete task")
+      toast.error(error?.data?.detail || "Failed to delete task")
     } finally {
       setIsDeleting(false)
     }

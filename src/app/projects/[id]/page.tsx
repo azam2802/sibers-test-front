@@ -48,6 +48,7 @@ function ProjectDetailContent() {
   const canManageProject =
     user?.role === "Director" ||
     (user?.role === "ProjectManager" && project?.managerId === user.id)
+console.log(user?.role, project?.managerId, user?.id)
 
   const canCreateTask = canManageProject
 
@@ -86,7 +87,11 @@ function ProjectDetailContent() {
             </div>
             {canManageProject && (
               <div className="flex gap-2">
-                <Button variant="outline" size="sm">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => router.push(`/projects/${projectId}/edit`)}
+                >
                   <Edit className="h-4 w-4 mr-2" />
                   Edit
                 </Button>

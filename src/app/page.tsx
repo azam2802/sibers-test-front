@@ -12,7 +12,6 @@ import Link from "next/link"
 import type { Project, Task } from "@/types"
 
 function HomeContent() {
-  const router = useRouter()
   const { user } = useAuthStore()
   const [projects, setProjects] = useState<Project[]>([])
   const [tasks, setTasks] = useState<Task[]>([])
@@ -21,30 +20,14 @@ function HomeContent() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (user?.role === "Director") {
-          const [projectsData, tasksData] = await Promise.all([
-            projectsService.getAll(),
-            tasksService.getAll(),
-          ])
-          setProjects(projectsData)
-          setTasks(tasksData)
-        } else if (user?.role === "ProjectManager") {
-          const [projectsData, tasksData] = await Promise.all([
-            projectsService.getAll(),
-            tasksService.getAll(),
-          ])
-          setProjects(projectsData.filter((p) => p.managerId === user.id))
-          setTasks(tasksData)
-        } else if (user) {
-          const tasksData = await tasksService.getByAssignee(user.id)
-          setTasks(tasksData)
-          // Get projects from tasks
-          const projectIds = [...new Set(tasksData.map((t) => t.projectId))]
-          const projectsData = await Promise.all(
-            projectIds.map((id) => projectsService.getById(id))
-          )
-          setProjects(projectsData)
-        }
+        const [projectsData, tasksData] = await Promise.all([
+          projectsService.getAll(),
+          tasksService.getAll(),
+        ])
+
+        setProjects(projectsData),
+        setTasks(tasksData)
+
       } catch (error) {
         console.error("Failed to fetch data:", error)
       } finally {

@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation"
 import { useAuthStore } from "@/store/auth-store"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { LayoutDashboard, FolderKanban, CheckSquare, LogOut } from "lucide-react"
+import { LayoutDashboard, FolderKanban, CheckSquare, LogOut, User } from "lucide-react"
 
 export function Navigation() {
   const pathname = usePathname()
@@ -34,6 +34,12 @@ export function Navigation() {
       label: "Tasks",
       icon: CheckSquare,
       roles: ["Director", "ProjectManager", "Employee"],
+    },
+    {
+      href: "/employees",
+      label: "Employees",
+      icon: User,
+      roles: ["Director"],
     },
   ]
 

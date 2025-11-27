@@ -25,6 +25,7 @@ import { projectsService } from "@/services/projects.service"
 import { useAuthStore } from "@/store/auth-store"
 import { AuthProtected } from "@/components/auth-protected"
 import type { Project } from "@/types"
+import { toast } from "react-hot-toast"
 
 function NewTaskContent() {
   const router = useRouter()
@@ -73,7 +74,7 @@ function NewTaskContent() {
       router.push(`/projects/${projectId}`)
     } catch (error: any) {
       console.error("Failed to create task:", error)
-      alert(error?.data?.title || "Failed to create task")
+      toast.error(error?.data?.detail || "Failed to create task")
     } finally {
       setIsLoading(false)
     }

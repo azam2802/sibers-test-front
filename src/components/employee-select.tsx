@@ -79,6 +79,7 @@ export function EmployeeSelect({
           }}
           onFocus={() => setIsOpen(true)}
           onBlur={() => setTimeout(() => setIsOpen(false), 200)}
+          onMouseDown={() => setIsOpen(true)}
           placeholder={placeholder}
           disabled={disabled || isLoading}
           required={required}

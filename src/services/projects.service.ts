@@ -34,12 +34,12 @@ export const projectsService = {
     return api.delete<void>(`/projects/${id}`)
   },
 
-  addEmployee: async (projectId: number, employeeId: number): Promise<{ message: string }> => {
-    return api.post<{ message: string }>(`/projects/${projectId}/employees/${employeeId}`)
+  addEmployees: async (projectId: number, employeeIds: number[]): Promise<void> => {
+    return api.post<void>(`/projects/${projectId}/employees`, { employeeIds })
   },
 
-  removeEmployee: async (projectId: number, employeeId: number): Promise<void> => {
-    return api.delete<void>(`/projects/${projectId}/employees/${employeeId}`)
+  removeEmployees: async (projectId: number, employeeIds: number[]): Promise<void> => {
+    return api.delete<void>(`/projects/${projectId}/employees`, { employeeIds })
   },
 }
 
