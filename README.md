@@ -1,5 +1,12 @@
 # Project Management System
 
+## Test login credentials
+
+### Director
+- Email: director@example.com
+- Password: director123
+
+
 ## 📦 Build
 
 ### Development
