@@ -4,7 +4,7 @@
 
 ### Director
 - Email: director@example.com
-- Password: director123
+- Password: Director@123
 
 
 ## 📦 Build
