@@ -19,6 +19,7 @@ import { ProjectFilesStep } from "@/components/projects/wizard/project-files-ste
 import { projectsService } from "@/services/projects.service"
 import { useAuthStore } from "@/store/auth-store"
 import { ChevronLeft, ChevronRight, X } from "lucide-react"
+import { WizardProgress } from "@/components/projects/wizard/wizard-progress"
 
 type WizardStep = 1 | 2 | 3 | 4 | 5
 
@@ -175,17 +176,7 @@ export default function NewProjectPage() {
         </CardHeader>
         <CardContent>
           <div className="mb-6">
-            <div className="flex items-center justify-between mb-2">
-              {[1, 2, 3, 4, 5].map((step) => (
-                <div
-                  key={step}
-                  className={`flex-1 h-2 rounded ${step <= currentStep
-                    ? "bg-primary"
-                    : "bg-muted"
-                    } ${step < 5 ? "mr-2" : ""}`}
-                />
-              ))}
-            </div>
+            <WizardProgress currentStep={currentStep} totalSteps={5} />
           </div>
 
           {renderStep()}

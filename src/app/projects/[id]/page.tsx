@@ -18,9 +18,9 @@ import { TaskCard } from "@/components/task-card"
 import { LoaderFullPage } from "@/components/loader"
 import type { Project, Task } from "@/types"
 import { Plus, Trash2, Edit, FileIcon, Download, ArrowLeft } from "lucide-react"
-import { FaRegFileCode, FaRegFileExcel, FaRegFileImage, FaRegFilePowerpoint, FaRegFileWord, FaRegFilePdf } from "react-icons/fa6"
+import { FaRegFileCode, FaRegFileExcel, FaRegFileImage, FaRegFilePowerpoint, FaRegFileWord } from "react-icons/fa6"
 import toast from "react-hot-toast"
-import { FaRegFileArchive } from "react-icons/fa"
+import { FaRegFileArchive, FaRegFilePdf } from "react-icons/fa"
 import { FiFileText } from "react-icons/fi"
 
 function ProjectDetailContent() {

@@ -15,6 +15,7 @@ import { ProjectCompaniesStep } from "@/components/projects/wizard/project-compa
 import { ProjectManagerStep } from "@/components/projects/wizard/project-manager-step"
 import { ProjectEmployeesStep } from "@/components/projects/wizard/project-employees-step"
 import { ProjectFilesStep } from "@/components/projects/wizard/project-files-step"
+import { WizardProgress } from "@/components/projects/wizard/wizard-progress"
 import { LoaderFullPage } from "@/components/loader"
 import { projectsService } from "@/services/projects.service"
 import { useAuthStore } from "@/store/auth-store"
@@ -262,15 +263,7 @@ function EditProjectContent() {
         </CardHeader>
         <CardContent>
           <div className="mb-6">
-            <div className="flex items-center justify-between mb-2">
-              {[1, 2, 3, 4, 5].map((step) => (
-                <div
-                  key={step}
-                  className={`flex-1 h-2 rounded ${step <= currentStep ? "bg-primary" : "bg-muted"
-                    } ${step < 5 ? "mr-2" : ""}`}
-                />
-              ))}
-            </div>
+            <WizardProgress currentStep={currentStep} totalSteps={5} />
           </div>
 
           {renderStep()}
