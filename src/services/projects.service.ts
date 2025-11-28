@@ -23,11 +23,48 @@ export const projectsService = {
   },
 
   create: async (data: CreateProjectDto): Promise<Project> => {
-    return api.post<Project>("/projects", data)
+    const formData = new FormData()
+    formData.append("name", data.name)
+    formData.append("customerCompany", data.customerCompany)
+    formData.append("executorCompany", data.executorCompany)
+    formData.append("startDate", data.startDate)
+    formData.append("endDate", data.endDate)
+    formData.append("priority", data.priority.toString())
+    formData.append("managerId", data.managerId.toString())
+
+    data.employeeIds.forEach((id) => {
+      formData.append("employeeIds", id.toString())
+    })
+
+    console.log(data.files)
+    if (data.files) {
+      console.log(data.files)
+      data.files.forEach((file) => {
+        formData.append("files", file)
+      })
+    }
+
+    return api.post<Project>("/projects", formData)
   },
 
   update: async (id: number, data: UpdateProjectDto): Promise<Project> => {
-    return api.put<Project>(`/projects/${id}`, data)
+    const formData = new FormData()
+    formData.append("name", data.name)
+    formData.append("customerCompany", data.customerCompany)
+    formData.append("executorCompany", data.executorCompany)
+    formData.append("startDate", data.startDate)
+    formData.append("endDate", data.endDate)
+    formData.append("priority", data.priority.toString())
+    formData.append("managerId", data.managerId.toString())
+
+    if (data.files) {
+      console.log(data.files)
+      data.files.forEach((file) => {
+        formData.append("files", file)
+      })
+    }
+
+    return api.put<Project>(`/projects/${id}`, formData)
   },
 
   delete: async (id: number): Promise<void> => {

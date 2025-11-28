@@ -14,9 +14,10 @@ import {
 } from "@/components/ui/card"
 import { AddEmployeeDialog } from "@/components/employees/add-employee-dialog"
 import { EditEmployeeDialog } from "@/components/employees/edit-employee-dialog"
-import { DeleteEmployeeDialog } from "@/components/employees/delete-employee-dialog"
+import { ConfirmDialog } from "@/components/confirm-dialog"
 import { EmployeesTable } from "@/components/employees/employees-table"
 import { LoaderFullPage } from "@/components/loader"
+import toast from "react-hot-toast"
 
 function EmployeesContent() {
   const { user } = useAuthStore()
@@ -154,9 +155,8 @@ function EmployeesContent() {
       setSuccess("Employee deleted successfully.")
       setIsDeleteDialogOpen(false)
       setDeletingEmployee(null)
-    } catch (err: any) {
-      console.error(err)
-      setError(err?.data?.detail || "Failed to delete employee.")
+    } catch (error: any) {
+      toast.error(error?.data?.detail || "Failed to delete employee.")
     } finally {
       setIsSubmitting(false)
     }
@@ -217,13 +217,13 @@ function EmployeesContent() {
         success={success}
       />
 
-      <DeleteEmployeeDialog
-        isOpen={isDeleteDialogOpen}
+      <ConfirmDialog
+        open={isDeleteDialogOpen}
         onOpenChange={handleDeleteDialogChange}
-        employee={deletingEmployee}
+        title="Delete Employee"
+        description={`Are you sure you want to delete ${deletingEmployee?.firstName} ${deletingEmployee?.lastName}? This action cannot be undone.`}
         onConfirm={handleDeleteConfirm}
-        isSubmitting={isSubmitting}
-        error={error}
+        isLoading={isSubmitting}
       />
     </div>
   )

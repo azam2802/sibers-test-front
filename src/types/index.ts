@@ -60,6 +60,12 @@ export interface UpdateEmployeeDto {
 }
 
 // Project Types
+export interface ProjectDocument {
+  id: number
+  fileName: string
+  url: string
+}
+
 export interface Project {
   id: number
   name: string
@@ -72,6 +78,7 @@ export interface Project {
   managerFullName: string
   employees: EmployeeShort[]
   tasksCount: number
+  documents: ProjectDocument[]
 }
 
 export interface CreateProjectDto {
@@ -83,6 +90,7 @@ export interface CreateProjectDto {
   priority: number
   managerId: number
   employeeIds: number[]
+  files?: File[]
 }
 
 export interface UpdateProjectDto {
@@ -93,6 +101,7 @@ export interface UpdateProjectDto {
   endDate: string
   priority: number
   managerId: number
+  files?: File[]
 }
 
 // Task Types

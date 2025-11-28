@@ -90,12 +90,10 @@ export default function NewProjectPage() {
         priority: parseInt(priority),
         managerId,
         employeeIds,
+        files,
       }
 
       await projectsService.create(projectData)
-
-      // TODO: Upload files if there's an endpoint
-      // For now, files are stored in state but not uploaded
 
       router.push("/projects")
     } catch (error: any) {
@@ -199,19 +197,19 @@ export default function NewProjectPage() {
                   type="button"
                   variant="outline"
                   onClick={handleBack}
-              disabled={currentStep === 1}
-            >
-              <ChevronLeft className="h-4 w-4 mr-1" />
-              Back
-            </Button>
+                  disabled={currentStep === 1}
+                >
+                  <ChevronLeft className="h-4 w-4 mr-1" />
+                  Back
+                </Button>
               ) : (
                 <Button
                   type="button"
                   variant="outline"
                   onClick={() => router.push("/projects")}
-            >
-              Cancel
-            </Button>
+                >
+                  Cancel
+                </Button>
               )
             }
             {currentStep < 5 ? (

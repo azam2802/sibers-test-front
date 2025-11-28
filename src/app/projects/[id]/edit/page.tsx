@@ -54,6 +54,7 @@ function EditProjectContent() {
 
   // Step 5
   const [files, setFiles] = useState<File[]>([])
+  const [documents, setDocuments] = useState<any[]>([])
 
   useEffect(() => {
     const loadProject = async () => {
@@ -96,6 +97,9 @@ function EditProjectContent() {
     const currentEmployeeIds = project.employees.map((emp) => emp.id)
     setEmployeeIds(currentEmployeeIds)
     setInitialEmployeeIds(currentEmployeeIds)
+    if (project.documents) {
+      setDocuments(project.documents)
+    }
   }
 
   const canProceed = () => {
@@ -144,6 +148,7 @@ function EditProjectContent() {
         endDate: new Date(endDate).toISOString(),
         priority: parseInt(priority),
         managerId,
+        files,
       }
 
       await projectsService.update(projectId, updateData)
@@ -173,6 +178,10 @@ function EditProjectContent() {
     } finally {
       setIsSubmitting(false)
     }
+  }
+
+  const handleDocumentDeleted = (documentId: number) => {
+    setDocuments((prev) => prev.filter((doc) => doc.id !== documentId))
   }
 
   const renderStep = () => {
@@ -222,6 +231,9 @@ function EditProjectContent() {
           <ProjectFilesStep
             files={files}
             setFiles={setFiles}
+            existingDocuments={documents}
+            projectId={projectId}
+            onDocumentDeleted={handleDocumentDeleted}
           />
         )
 

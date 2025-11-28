@@ -21,8 +21,8 @@ export function TaskCard({ task, onClick }: TaskCardProps) {
                                 className={`px-2 py-1 rounded text-xs ${task.status === "Done"
                                         ? "bg-green-500/20 text-green-500"
                                         : task.status === "InProgress"
-                                            ? "bg-blue-500/20 text-blue-500"
-                                            : "bg-gray-500/20 text-gray-500"
+                                            ? "bg-yellow-500/20 text-yellow-500"
+                                            : "bg-blue-500/20 text-blue-500"
                                     }`}
                             >
                                 {task.status}

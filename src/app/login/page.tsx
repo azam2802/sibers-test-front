@@ -34,7 +34,7 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    
+
     try {
       const { authService } = await import("@/services/auth.service")
       const response = await authService.login({ email, password })

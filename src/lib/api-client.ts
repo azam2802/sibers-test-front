@@ -29,7 +29,7 @@ async function apiRequest<T>(
     }
 
     const headers: Record<string, string> = {
-        "Content-Type": "application/json",
+        ...(options.body instanceof FormData ? {} : { "Content-Type": "application/json" }),
         ...(options.headers as Record<string, string> || {}),
     }
 
@@ -59,17 +59,17 @@ export const api = {
     post: <T>(endpoint: string, data?: any) =>
         apiRequest<T>(endpoint, {
             method: "POST",
-            body: data ? JSON.stringify(data) : undefined,
+            body: data instanceof FormData ? data : (data ? JSON.stringify(data) : undefined),
         }),
     put: <T>(endpoint: string, data?: any) =>
         apiRequest<T>(endpoint, {
             method: "PUT",
-            body: data ? JSON.stringify(data) : undefined,
+            body: data instanceof FormData ? data : (data ? JSON.stringify(data) : undefined),
         }),
     delete: <T>(endpoint: string, data?: any) =>
         apiRequest<T>(endpoint, {
             method: "DELETE",
-            body: data ? JSON.stringify(data) : undefined,
+            body: data instanceof FormData ? data : (data ? JSON.stringify(data) : undefined),
         }),
 }
 

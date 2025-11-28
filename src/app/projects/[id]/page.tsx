@@ -17,7 +17,11 @@ import { AuthProtected } from "@/components/auth-protected"
 import { TaskCard } from "@/components/task-card"
 import { LoaderFullPage } from "@/components/loader"
 import type { Project, Task } from "@/types"
-import { Plus, Calendar, Users, Trash2, Edit } from "lucide-react"
+import { Plus, Trash2, Edit, FileIcon, Download, ArrowLeft } from "lucide-react"
+import { FaRegFileCode, FaRegFileExcel, FaRegFileImage, FaRegFilePowerpoint, FaRegFileWord, FaRegFilePdf } from "react-icons/fa6"
+import toast from "react-hot-toast"
+import { FaRegFileArchive } from "react-icons/fa"
+import { FiFileText } from "react-icons/fi"
 
 function ProjectDetailContent() {
   const params = useParams()
@@ -43,8 +47,9 @@ function ProjectDetailContent() {
           setTasks(tasksData.filter((task) => task.assigneeId === user.id))
         }
 
-      } catch (error) {
+      } catch (error: any) {
         console.error("Failed to fetch project:", error)
+        toast.error(error?.data?.detail || "Failed to fetch project.")
       } finally {
         setIsLoading(false)
       }
@@ -52,6 +57,11 @@ function ProjectDetailContent() {
 
     fetchData()
   }, [projectId])
+
+  const downloadDocument = (documentUrl: string) => {
+    const fullUrl = `${process.env.NEXT_PUBLIC_API_URL?.replace('/api', '')}${documentUrl}`
+    window.open(fullUrl, '_blank')
+  }
 
   const canManageProject =
     user?.role === "Director" ||
@@ -65,8 +75,11 @@ function ProjectDetailContent() {
 
   if (!project) {
     return (
-      <div className="container mx-auto py-8 px-4">
-        <p>Project not found</p>
+      <div className="container text-center mx-auto py-8 px-4">
+        <p className="mb-4">Project not found or you don't have access to it.</p>
+        <Button variant="outline" onClick={() => router.push("/projects")}>
+          <ArrowLeft className="mr-2 h-4 w-4" />Back to Projects
+        </Button>
       </div>
     )
   }
@@ -75,7 +88,7 @@ function ProjectDetailContent() {
     <div className="container mx-auto py-8 px-4 max-w-6xl">
       <div className="mb-6">
         <Button variant="outline" onClick={() => router.push("/projects")}>
-          ← Back to Projects
+          <ArrowLeft className="mr-2 h-4 w-4" />Back to Projects
         </Button>
       </div>
 
@@ -148,6 +161,56 @@ function ProjectDetailContent() {
           )}
         </CardContent>
       </Card>
+
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold">Documents</h2>
+      </div>
+
+      {project.documents.length === 0 ? (
+        <Card className="mb-8">
+          <CardContent className="py-12 text-center">
+            <p className="text-muted-foreground">
+              No documents found.
+            </p>
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="space-y-2 mb-8">
+          {project.documents.map((doc) => (
+            <Card key={doc.id}>
+              <CardContent className="p-4 flex items-center justify-between">
+                <CardTitle className="text-lg">
+                  {doc.fileName.includes(".pdf") ? (
+                    <FaRegFilePdf className="inline mr-2 align-[-2px]" />
+                  ) : doc.fileName.includes(".doc") || doc.fileName.includes(".docx") ? (
+                    <FaRegFileWord className="inline mr-2 align-[-2px]" />
+                  ) : doc.fileName.includes(".xls") || doc.fileName.includes(".xlsx") || doc.fileName.includes(".csv") ? (
+                    <FaRegFileExcel className="inline mr-2 align-[-2px]" />
+                  ) : doc.fileName.includes(".ppt") || doc.fileName.includes(".pptx") ? (
+                    <FaRegFilePowerpoint className="inline mr-2 align-[-2px]" />
+                  ) : doc.fileName.includes(".txt") ? (
+                    <FiFileText className="inline mr-2 align-[-2px]" />
+                  ) : doc.fileName.includes(".zip") || doc.fileName.includes(".rar") ? (
+                    <FaRegFileArchive className="inline mr-2 align-[-2px]" />
+                  ) : doc.fileName.includes(".jpg") || doc.fileName.includes(".png") || doc.fileName.includes(".jpeg") ? (
+                    <FaRegFileImage className="inline mr-2 align-[-2px]" />
+                  ) : doc.fileName.includes(".js") || doc.fileName.includes(".jsx") || doc.fileName.includes(".ts") || doc.fileName.includes(".tsx") || doc.fileName.includes(".json") || doc.fileName.includes(".html") || doc.fileName.includes(".css") ? (
+                    <FaRegFileCode className="inline mr-2 align-[-2px]" />
+                  ) : (
+                    <FileIcon className="inline mr-2 align-[-2px]" />
+                  )}
+                  {doc.fileName}
+                </CardTitle>
+                <Button variant="outline" size="sm" onClick={() => downloadDocument(doc.url)}>
+                  <Download className="h-4 w-4 mr-2" />
+                  Download
+                </Button>
+              </CardContent>
+
+            </Card>
+          ))}
+        </div>
+      )}
 
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">{user?.role !== "Employee" ? "All" : "Your"} Tasks</h2>
