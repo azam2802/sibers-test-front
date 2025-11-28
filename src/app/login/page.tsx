@@ -49,7 +49,21 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background p-4">
+    <div className="flex min-h-screen items-center justify-center bg-background p-4 flex-col">
+      <Card className="w-full max-w-md mb-4 bg-secondary/50">
+        <CardHeader>
+          <CardTitle className="text-lg">Test Credentials</CardTitle>
+          <CardDescription>Use these credentials to test the application</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <div className="p-3 bg-background rounded-md border">
+            <p className="text-sm font-medium mb-1">Director Account</p>
+            <p className="text-xs text-muted-foreground">Email: <span className="font-mono">director@example.com</span></p>
+            <p className="text-xs text-muted-foreground">Password: <span className="font-mono">Director@123</span></p>
+          </div>
+        </CardContent>
+      </Card>
+
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">

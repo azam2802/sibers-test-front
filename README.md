@@ -9,6 +9,11 @@
 
 ## 📦 Build
 
+### Install dependencies
+```bash
+npm install
+```
+
 ### Development
 ```bash
 npm run dev      # Starts dev server on :3000
